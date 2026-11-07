@@ -8,7 +8,27 @@
  <h1 id="paper-title"><strong>SLIC:</strong> Reinforcement Fine-Tuning Small LMs<br> for Multi-Turn Analog Circuit Optimization</h1>
  <p class="authors">Yan Xu<sup>1</sup>, Zhengqi Gao<sup>1</sup>, Ching-Yun Ko<sup>3</sup>, Zhang-Wei Hong<sup>3</sup>, Wenjie Lu<sup>2</sup>,<br class="author-break"> Tao Yu<sup>2</sup>, Xin Zhang<sup>3</sup>, Duane S. Boning<sup>1</sup>, Ruonan Han<sup>1</sup></p>
  <p class="affiliations"><span><sup>1</sup> MIT EECS</span><span><sup>2</sup> Analog Devices</span><span><sup>3</sup> IBM Research</span></p>
- <div class="paper-links"><span class="button pending" aria-disabled="true" aria-label="Paper release forthcoming">Paper <small>Coming soon</small></span><span class="button pending" aria-label="Code release forthcoming">Code <small>Coming soon</small></span><a class="button secondary" href="#circuits">Demo cases</a><a class="button secondary" href="#cite">BibTeX</a></div>
+ <div class="paper-links">
+  <span class="button pending" aria-disabled="true" aria-label="Paper release forthcoming">
+   <svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z M14 3v5h4 M9 12h6 M9 16h6"/></svg>
+   Paper <small>Coming soon</small>
+  </span>
+  <span class="button pending" aria-disabled="true" aria-label="Code release forthcoming">
+   <svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16"/></svg>
+   Code <small>Coming soon</small>
+  </span>
+  <a class="button secondary hf-link" href="https://huggingface.co/slic-agent">
+   <span class="hf-icon" aria-hidden="true">🤗</span> Data and Models
+  </a>
+  <a class="button secondary" href="#circuits">
+   <svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3"/><path d="m10 8 6 4-6 4z"/></svg>
+   Demo cases
+  </a>
+  <a class="button secondary" href="#cite">
+   <svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3H8a2 2 0 0 0-2 2v4c0 2-1 3-3 3 2 0 3 1 3 3v4a2 2 0 0 0 2 2h1m6-18h1a2 2 0 0 1 2 2v4c0 2 1 3 3 3-2 0-3 1-3 3v4a2 2 0 0 1-2 2h-1"/></svg>
+   BibTeX
+  </a>
+ </div>
  <p class="research-claim"><strong>A locally deployable 4B language model learns to optimize analog circuits through simulator feedback, with generalization to held-out topologies and unseen technology nodes.</strong></p>
  <div class="key-findings" aria-label="Main experimental findings">
   <a href="#results"><strong>87.1<span>%</span></strong><div><b>Success on seen topologies</b><small>840 tasks · 35 topologies<br>SLIC–Random · 8 turns</small></div></a>
@@ -141,7 +161,7 @@
  </div><p class="explorer-footnote"><strong>Source: manuscript Appendix L.1–L.2; schematics correspond to Figures 11–12.</strong> Both examples satisfy the original four targets after four turns without relying on the 5% evaluation tolerance. The displayed targets are nominal; invalid states are never counted as successful. <span class="resource-pending" aria-disabled="true">Full case studies · Coming soon</span></p>
 </section>
 
-<section id="resources" class="resources-band"><div class="section-wrap section-space"><div class="section-heading"><div><div class="eyebrow">Research artifacts</div><h2>Resources and citation</h2></div><p>Public paper, code, and benchmark links will be added as they become available. Recorded circuit examples are available on this page.</p></div><div class="resource-grid"><div class="resource-pending" aria-disabled="true"><span>01 / MANUSCRIPT</span><strong>Paper</strong><small>Coming soon</small></div><a href="#circuits"><span>02 / DESIGN TRACES</span><strong>Inspect the cases <b>↗</b></strong><small>Recorded inputs, model responses & measurements</small></a><a href="https://huggingface.co/slic-agent"><span>03 / MODELS &amp; DATASETS</span><strong>Hugging Face <b aria-hidden="true">↗</b></strong><small>Model checkpoints and datasets coming soon</small></a></div>
+<section id="resources" class="resources-band"><div class="section-wrap section-space"><div class="section-heading"><div><div class="eyebrow">Research artifacts</div><h2>Resources and citation</h2></div><p>Public paper, code, and benchmark links will be added as they become available. Recorded circuit examples are available on this page.</p></div><div class="resource-grid"><div class="resource-pending" aria-disabled="true"><span>Manuscript</span><strong>Paper</strong><small>Coming soon</small></div><a href="#circuits"><span>Design traces</span><strong>Inspect the cases <b>↗</b></strong><small>Recorded inputs, model responses & measurements</small></a><a href="https://huggingface.co/slic-agent"><span>Models and datasets</span><strong>Hugging Face <b aria-hidden="true">↗</b></strong><small>Model checkpoints and datasets coming soon</small></a></div>
  <div class="citation-head" id="cite"><h3>Citation</h3><button id="copy-citation" class="small-button">Copy BibTeX ⧉</button></div><pre class="citation" id="citation">@inproceedings{xu2026slic,
   title = {SLIC: Reinforcement Fine-Tuning Small LMs for
            Multi-Turn Analog Circuit Optimization},
