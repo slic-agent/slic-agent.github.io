@@ -1,0 +1,162 @@
+[
+  [
+    {
+      "reasoning": "The current operating point is far from specs: DC gain is only 25 dB (needs >=61.7 dB),\npower is 14.35 mW (needs <=425.7 uW), and phase margin is -36 deg (needs 30-90 deg).\nBandwidth is 111 kHz, which is acceptable, but the main problems are: 1. Excessive bias\ncurrent: iref=23u causes excessive DC current. 2. PMOS current source MM1/MM2 is too\nshort (69.58nm) and wide, allowing too much DC current. 3. NMOS current source MM9/MM10\nis very wide (175.1u) and acts as resistor rather than current source; needs moderate\nW/L. 4. Input pair MM3/MM0 is too wide and short; needs stronger gm with better ro.\n5. Tail MM4 is over-sized in current. 6. PMOS current source MM5/MM6 and NMOS cascode\n   MM7/MM8 are weak (only 117.9n/75.97n). 7. DC gain is low because ro of signal devices\n   are too small. Strategy: Reduce iref, make PMOS load stronger but less conductive,\n   improve input pair, moderate tail, strengthen cascode current source, and fix bias\n   blocks. ...",
+      "actions": [
+        "decrease @70 iref 95%",
+        "increase @15 l_MM12 200%",
+        "decrease @15 w_MM12 50%",
+        "decrease @30 w_MM30 70%",
+        "increase @30 l_MM30 200%",
+        "decrease @35 w_MM4 50%",
+        "increase @35 l_MM4 20%",
+        "decrease @16 w_MM910 95%",
+        "increase @16 l_MM910 50%",
+        "increase @40 w_MM56 500%",
+        "decrease @40 l_MM56 99%",
+        "increase @50 w_MM78 500%",
+        "decrease @50 l_MM78 99%",
+        "decrease @73 w_MM14 95%",
+        "decrease @73 l_MM14 85%",
+        "decrease @78 w_MM15 98%",
+        "increase @78 l_MM15 300%",
+        "decrease @83 w_MM16 95%",
+        "decrease @83 l_MM16 70%",
+        "increase @104 w_MM41 500%",
+        "increase @109 w_MM42 500%",
+        "increase @114 w_MM44 10%"
+      ]
+    },
+    {
+      "reasoning": "The current operating point is invalid: DC gain is -21.9 dB (magnitude only 0.219x). The\nprevious aggressive changes destroyed the DC bias: the PMOS current source/load\n(MM1/MM2) is too strong, tail MM4 is weak, input pair MM3/MM0 is weak, and NMOS current\nsource MM9/MM10 is overkill. The core needs to be restored: make PMOS load weaker\n(larger l_MM12, smaller MM1/MM2), stronger input pair MM3/MM0, stronger tail MM4,\nmoderate iref, and adjust NMOS cascode/load. Need positive DC gain first.",
+      "actions": [
+        "increase @15 l_MM12 400.0%",
+        "decrease @15 w_MM12 30.0%",
+        "increase @10 w_MM30 100.0%",
+        "increase @10 l_MM30 100.0%",
+        "increase @35 w_MM4 300.0%",
+        "increase @35 l_MM4 50.0%",
+        "decrease @16 w_MM910 70.0%",
+        "increase @16 l_MM910 20.0%",
+        "increase @40 w_MM56 300.0%",
+        "increase @40 l_MM56 20.0%",
+        "increase @50 w_MM78 200.0%",
+        "increase @50 l_MM78 20.0%",
+        "decrease @70 iref 10.0%",
+        "decrease @73 w_MM14 70.0%",
+        "decrease @73 l_MM14 20.0%",
+        "increase @78 w_MM15 100.0%",
+        "decrease @78 l_MM15 10.0%",
+        "decrease @83 w_MM16 70.0%",
+        "increase @83 l_MM16 10.0%",
+        "increase @98 w_MM34 150.0%",
+        "decrease @93 w_MM32 85.0%",
+        "decrease @88 w_MM31 70.0%",
+        "decrease @88 l_MM31 60.0%"
+      ]
+    },
+    {
+      "reasoning": "Current specs: Gain is 75.6 dB, well above the 61.7 dB target. Power is only 98 uW, well\nwithin 425.7 uW. Phase margin is 42 deg, which meets 30-90 deg. The unmet spec is\nbandwidth: only 15 kHz, needs >=43.1 kHz. The main bottleneck is the high output\nresistance: MM3/MM0 are long (1u), MM1/MM2 PMOS load is long (1u), MM9/MM10 current\nsource is very long (11.3u), and PMOS/NMOS cascode/load devices MM5/MM6 and MM7/MM8 are\nmodest. The DC gain is excessive because ro of input pair and PMOS load are large. Need\nto reduce device lengths, especially ro of signal path devices ... Goal is to lower ro\nto reduce Rout, improving -3dB bandwidth while maintaining adequate DC gain.",
+      "actions": [
+        "decrease @10 l_MM30 70%",
+        "increase @10 w_MM30 10%",
+        "decrease @15 l_MM12 60%",
+        "increase @15 w_MM12 20%",
+        "decrease @16 l_MM910 80%",
+        "increase @16 w_MM910 50%",
+        "increase @40 w_MM56 100%",
+        "decrease @40 l_MM56 20%",
+        "increase @50 w_MM78 100%",
+        "decrease @50 l_MM78 15%",
+        "decrease @70 iref 10%"
+      ]
+    },
+    {
+      "reasoning": "Current specs: Gain is 75.9 dB (well above 61.7 dB target), Power is only 169 uW (well\nwithin 425.7 uW), Phase Margin is 52 deg (meets 30-90 deg). The only unmet spec is\nBandwidth: 37 kHz requires >=43.1 kHz. The main bottleneck is the DC gain, dominated by\nro of signal path devices. Need to reduce ro of MM0/MM3 (input pair), MM1/MM2 PMOS load,\nMM9/MM10 current source, MM5/MM6 PMOS cascode, MM7/MM8 NMOS cascode. Strategy: decrease\ndevice lengths, especially l_MM30, l_MM12, l_MM910, l_MM56, l_MM78. Also improve iref\nslightly for more current.",
+      "actions": [
+        "decrease @10 l_MM30 50.0%",
+        "decrease @15 l_MM12 40.0%",
+        "increase @15 w_MM12 10.0%",
+        "decrease @16 l_MM910 55.0%",
+        "increase @16 w_MM910 15.0%",
+        "decrease @40 l_MM56 25.0%",
+        "increase @40 w_MM56 10.0%",
+        "decrease @50 l_MM78 30.0%",
+        "increase @50 w_MM78 15.0%",
+        "increase @70 iref 15.0%"
+      ]
+    }
+  ],
+  [
+    {
+      "reasoning": "The current operating point is invalid: DC gain is -123.2 dB (magnitude only\n0.123 dB), power 52 uW is fine but bandwidth is not measurable because the\nlow-frequency gain is essentially zero. The main problems are:\n1. PMOS load MM1/MM2 is very weak: W/L only 1.6u/20u = 0.08. Needs stronger PMOS\n   current source.\n2. NMOS pair MM3 is too weak: W/L only 462.5n/185.9n = 2.49, needs wider input\n   pair.\n3. Tail MM4 is poorly sized: W/L only 1.8u/20u = 0.09, should provide more tail\n   current.\n4. PMOS current source MM5/MM6 is too wide/triode: 22u/417n acts as resistor\n   rather than DC current source.\n5. NMOS load MM7/MM8 is too weak: W=58.7n, L=7.9u gives poor DC level shifting.\n   Need stronger NMOS load.\n6. iref can be reduced later, but first establish DC bias. Strategy: Make MM3\n   strong pair, MM1/MM2 moderate PMOS load, stronger tail, better PMOS current\n   source, stronger NMOS load, moderate iref.",
+      "actions": [
+        "increase @22 w_MM30 500%",
+        "decrease @22 l_MM30 20%",
+        "increase @12 w_MM21 500%",
+        "decrease @12 l_MM21 99%",
+        "increase @27 w_MM4 500%",
+        "decrease @27 l_MM4 99%",
+        "decrease @32 w_MM56 95%",
+        "increase @32 l_MM56 100%",
+        "increase @42 w_MM78 500%",
+        "decrease @42 l_MM78 99%",
+        "decrease @55 iref 50%",
+        "increase @58 w_MM9 100%",
+        "increase @58 l_MM9 50%"
+      ]
+    },
+    {
+      "reasoning": "The current operating point is invalid: DC gain is -118.4 dB (magnitude only\n0.118 V/V). The DC gain polarity and magnitude are wrong. The main problems are\nthe bias: PMOS load MM1/MM2 is too strong compared to NMOS pair MM0/MM3, tail\nMM4 current is moderate, PMOS current source MM5/MM6 and NMOS current mirror\nMM7/MM8 are not properly sized. The DC operating point is such that Vout is\nwrong. Need to restore DC: make NMOS pair MM0/MM3 stronger (larger W, longer L),\nPMOS load MM1/MM2 weaker (smaller W, longer L), stronger tail MM4, stronger PMOS\ncurrent source MM5/MM6, and better NMOS current mirror MM7/MM8. iref can be\nreduced later for power.",
+      "actions": [
+        "increase @22 w_MM30 500.0%",
+        "increase @22 l_MM30 200.0%",
+        "decrease @12 w_MM21 80.0%",
+        "increase @12 l_MM21 400.0%",
+        "increase @27 w_MM4 200.0%",
+        "decrease @27 l_MM4 10.0%",
+        "increase @32 w_MM56 300.0%",
+        "decrease @32 l_MM56 50.0%",
+        "increase @42 w_MM78 500.0%",
+        "increase @42 l_MM78 100.0%",
+        "decrease @55 iref 20.0%",
+        "decrease @58 w_MM9 20.0%",
+        "decrease @58 l_MM9 20.0%"
+      ]
+    },
+    {
+      "reasoning": "Current specs: Gain is 40.2 dB (well above 26.4 dB target), BW is 7 MHz (meets\n1.25 MHz requirement), but Power is 224 uW (exceeds 170.1 uW) and Phase Margin\nis only 8 deg (needs 30-90 deg). The main issues are excessive bias current and\nover-sized PMOS current source/load devices causing too much unity-gain\nfrequency phase lag. Need to reduce iref, scale down MM5/MM6 PMOS current\nsource, MM7/MM8 NMOS load, and iref/MM9 bias to save power and improve phase\nmargin while maintaining gain and bandwidth.",
+      "actions": [
+        "decrease @55 iref 65.0%",
+        "decrease @32 w_MM56 60.0%",
+        "decrease @32 l_MM56 40.0%",
+        "decrease @42 w_MM78 50.0%",
+        "decrease @42 l_MM78 20.0%",
+        "decrease @27 w_MM4 40.0%",
+        "decrease @27 l_MM4 15.0%",
+        "decrease @12 w_MM21 20.0%",
+        "decrease @12 l_MM21 20.0%",
+        "decrease @58 w_MM9 30.0%",
+        "increase @58 l_MM9 10.0%"
+      ]
+    },
+    {
+      "reasoning": "Current specs: Gain is 36.2 dB (well above 26.4 dB target), Power is only 90 uW\n(well within 170.1 uW), Bandwidth is 5 MHz (exceeds 1.25 MHz requirement). The\nonly unmet spec is Phase Margin, which is 24 deg but requires 30.0 deg to 90.0\ndeg. The main issue is excessive DC gain due to large ro of signal path devices,\ncausing too much phase lag at unity-gain frequency. Need to reduce ro of\noutput/load devices to lower DC gain and improve phase margin while maintaining\ngain and bandwidth. Strategy: reduce device lengths (MM0/MM3, MM1/MM2, MM5/MM6,\nMM7/MM8) and iref to lower ro and DC current, decreasing DC gain and improving\nphase margin. Decrease iref moderately to save power.",
+      "actions": [
+        "decrease @7 w_MM30 50.0%",
+        "decrease @7 l_MM30 40.0%",
+        "decrease @12 w_MM21 30.0%",
+        "decrease @12 l_MM21 40.0%",
+        "decrease @32 w_MM56 50.0%",
+        "decrease @32 l_MM56 40.0%",
+        "decrease @42 w_MM78 40.0%",
+        "decrease @42 l_MM78 30.0%",
+        "decrease @55 iref 30.0%",
+        "decrease @27 w_MM4 30.0%",
+        "decrease @27 l_MM4 15.0%",
+        "decrease @58 w_MM9 20.0%",
+        "decrease @58 l_MM9 10.0%"
+      ]
+    }
+  ]
+]
