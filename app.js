@@ -101,3 +101,86 @@ $('#copy-citation').addEventListener('click',async()=>{
  try{await navigator.clipboard.writeText($('#citation').textContent);toast('BibTeX copied');$('#copy-citation').textContent='Copied ✓';setTimeout(()=>$('#copy-citation').textContent='Copy BibTeX ⧉',2200);}
  catch{const range=document.createRange();range.selectNodeContents($('#citation'));const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);toast('Citation selected. Use your browser’s copy command.');}
 });
+
+function initTrainingDiagram() {
+ const figure = $('.rgrs-figure');
+ const svg = $('.rgrs-loop-diagram', figure);
+ const controls = $('.flow-controls', figure);
+ const buttons = $$('[data-show-stage]', controls);
+ const playback = $('.flow-playback', controls);
+ const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+ const stages = buttons.map(button => button.dataset.showStage);
+ const highlights = $$('[data-stage]', svg);
+ const edges = $$('path[data-stage]', svg).map(path => {
+  const dot = document.createElementNS(svg.namespaceURI, 'circle');
+  dot.setAttribute('class', 'flow-pulse');
+  dot.setAttribute('r', '5');
+  dot.setAttribute('fill', path.parentElement.getAttribute('stroke'));
+  dot.setAttribute('visibility', 'hidden');
+  svg.appendChild(dot);
+  return { path, dot, length: path.getTotalLength(), start: Number(path.dataset.start), end: Number(path.dataset.end) };
+ });
+ let stage = 0;
+ let elapsed = 0;
+ let previousTime = null;
+ let frame = null;
+ let inView = false;
+ let playing = !motion.matches;
+ const stageDuration = 2600;
+
+ function highlight() {
+  for (const element of highlights) element.classList.toggle('is-current', element.dataset.stage === stages[stage]);
+  buttons.forEach((button, index) => button.setAttribute('aria-pressed', String(index === stage)));
+ }
+ function paintDots() {
+  const progress = elapsed / stageDuration;
+  for (const { path, dot, length, start, end } of edges) {
+   const visible = playing && path.dataset.stage === stages[stage] && progress >= start && progress < end;
+   dot.setAttribute('visibility', visible ? 'visible' : 'hidden');
+   if (visible) {
+    const point = path.getPointAtLength(length * (progress - start) / (end - start));
+    dot.setAttribute('cx', point.x);
+    dot.setAttribute('cy', point.y);
+   }
+  }
+ }
+ function tick(time) {
+  if (previousTime !== null) elapsed += time - previousTime;
+  previousTime = time;
+  if (elapsed >= stageDuration) {
+   stage = (stage + Math.floor(elapsed / stageDuration)) % stages.length;
+   elapsed %= stageDuration;
+   highlight();
+  }
+  paintDots();
+  frame = requestAnimationFrame(tick);
+ }
+ function syncPlayback() {
+  if (frame !== null) cancelAnimationFrame(frame);
+  previousTime = null;
+  frame = null;
+  playback.textContent = playing ? 'Pause' : 'Play';
+  playback.setAttribute('aria-label', playing ? 'Pause training animation' : 'Play training animation');
+  paintDots();
+  if (playing && inView && !document.hidden) frame = requestAnimationFrame(tick);
+ }
+
+ buttons.forEach((button, index) => button.addEventListener('click', () => {
+  stage = index;
+  elapsed = 0;
+  playing = false;
+  highlight();
+  syncPlayback();
+ }));
+ playback.addEventListener('click', () => { playing = !playing; syncPlayback(); });
+ motion.addEventListener('change', () => { playing = !motion.matches; syncPlayback(); });
+ document.addEventListener('visibilitychange', syncPlayback);
+ new IntersectionObserver(([entry]) => {
+  inView = entry.isIntersecting;
+  syncPlayback();
+ }).observe(svg);
+ controls.hidden = false;
+ highlight();
+ syncPlayback();
+}
+initTrainingDiagram();

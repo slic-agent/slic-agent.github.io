@@ -90,7 +90,7 @@
   <p class="analysis-takeaway"><strong>Teacher–student analogy.</strong> The demonstrations teach a student the basic circuit reasoning, response format, and parameter-update language before it practices making successive decisions on its own.</p>
  </article>
  <article class="training-stage"><div class="stage-heading"><span class="stage-number">02</span><div><h3>Reinforcement learning: practice with simulator feedback</h3><p>The SFT-initialized model learns from verifiable simulator feedback over rollouts of up to eight turns.</p></div></div>
-  <h4 class="rgrs-title">RGRS: online rollout construction</h4><p class="rgrs-intro">Sample and simulate alternatives, continue from one eligible state, and retain all candidates for policy learning.</p>
+  <h4 class="rgrs-title" id="rgrs">RGRS: online rollout construction</h4><p class="rgrs-intro">Sample and simulate alternatives, continue from one eligible state, and retain all candidates for policy learning.</p>
   <figure class="rgrs-figure">
    <div class="diagram-scroll" tabindex="0" role="region" aria-label="RGRS training loop diagram; scroll horizontally on small screens">
     <svg class="rgrs-loop-diagram" viewBox="0 0 1100 470" role="img" aria-labelledby="rgrs-diagram-title rgrs-diagram-desc" xmlns="http://www.w3.org/2000/svg">
@@ -98,24 +98,33 @@
      <desc id="rgrs-diagram-desc">The policy samples candidate update sets from a shared circuit state and history. Simulation returns successor states, validity and rewards. One eligible state continues to the next turn. All candidate transitions are stored. After rollout collection, validity and performance feedback are normalized separately into advantages, which weight the response tokens in the GRPO policy update. The updated policy is used in the next training iteration.</desc>
      <defs><marker id="rollout-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#9f2840"/></marker><marker id="learning-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#405c83"/></marker></defs>
      <g fill="none" stroke="#9f2840" stroke-width="2.2" marker-end="url(#rollout-arrow)">
-      <path d="M225 160H295"/><path d="M515 160H565"/><path d="M805 160H855"/>
-      <path d="M970 90V40H125V80"/>
+      <path data-stage="sample" data-start="0" data-end="0.8" d="M225 160H295"/><path data-stage="simulate" data-start="0" data-end="0.8" d="M515 160H565"/><path data-stage="route" data-start="0" data-end="0.35" d="M805 160H855"/>
+      <path data-stage="route" data-start="0.35" data-end="0.95" d="M970 90V40H125V80"/>
      </g>
      <text x="550" y="26" text-anchor="middle" class="diagram-return">NEXT TURN · Continue with the selected circuit state and updated history</text>
-     <g class="diagram-card"><rect x="25" y="90" width="200" height="138" rx="5"/><text x="43" y="119" class="diagram-kicker">SHARED CONTEXT</text><text x="43" y="151" class="diagram-title">Current circuit</text><text x="43" y="176" class="diagram-title">+ history</text><text x="43" y="208" class="diagram-copy">Same design targets</text></g>
-     <g class="diagram-card"><rect x="305" y="90" width="210" height="138" rx="5"/><text x="323" y="119" class="diagram-kicker">SAMPLE WITH POLICY π</text><text x="323" y="151" class="diagram-title">Candidate updates</text><text x="323" y="182" class="diagram-copy">Update sets A, B, …, G</text><text x="323" y="208" class="diagram-copy">One or more edits each</text></g>
-     <g class="diagram-card"><rect x="575" y="90" width="230" height="138" rx="5"/><text x="593" y="119" class="diagram-kicker">SIMULATE EACH</text><text x="593" y="151" class="diagram-title">Successor states</text><text x="593" y="176" class="diagram-title">+ validity + rewards</text><text x="593" y="208" class="diagram-copy">One call per candidate</text></g>
-     <g class="diagram-card selected"><rect x="865" y="90" width="210" height="138" rx="5"/><text x="883" y="119" class="diagram-kicker">CONTINUE ONE</text><text x="883" y="151" class="diagram-title">Next circuit state</text><text x="883" y="182" class="diagram-copy">Random, Softmax,</text><text x="883" y="208" class="diagram-copy">or Greedy selection</text></g>
+     <g class="diagram-card" data-stage="sample"><rect x="25" y="90" width="200" height="138" rx="5"/><text x="43" y="119" class="diagram-kicker">SHARED CONTEXT</text><text x="43" y="151" class="diagram-title">Current circuit</text><text x="43" y="176" class="diagram-title">+ history</text><text x="43" y="208" class="diagram-copy">Same design targets</text></g>
+     <g class="diagram-card" data-stage="sample"><rect x="305" y="90" width="210" height="138" rx="5"/><text x="323" y="119" class="diagram-kicker">SAMPLE WITH POLICY π</text><text x="323" y="151" class="diagram-title">Candidate updates</text><text x="323" y="182" class="diagram-copy">Update sets A, B, …, G</text><text x="323" y="208" class="diagram-copy">One or more edits each</text></g>
+     <g class="diagram-card" data-stage="simulate"><rect x="575" y="90" width="230" height="138" rx="5"/><text x="593" y="119" class="diagram-kicker">SIMULATE EACH</text><text x="593" y="151" class="diagram-title">Successor states</text><text x="593" y="176" class="diagram-title">+ validity + rewards</text><text x="593" y="208" class="diagram-copy">One call per candidate</text></g>
+     <g class="diagram-card" data-stage="route"><rect x="865" y="90" width="210" height="138" rx="5"/><text x="883" y="119" class="diagram-kicker">CONTINUE ONE</text><text x="883" y="151" class="diagram-title">Next circuit state</text><text x="883" y="182" class="diagram-copy">Random, Softmax,</text><text x="883" y="208" class="diagram-copy">or Greedy selection</text></g>
      <g fill="none" stroke="#405c83" stroke-width="2.2" marker-end="url(#learning-arrow)">
-      <path d="M690 228V268H935V305"/><path d="M795 373H735"/><path d="M425 373H365"/>
-      <path d="M200 315V272H410V238" stroke-dasharray="6 4"/>
+      <path data-stage="route" data-start="0" data-end="0.7" d="M690 228V268H935V305"/><path data-stage="learn" data-start="0" data-end="0.26" d="M795 373H735"/><path data-stage="learn" data-start="0.28" data-end="0.55" d="M425 373H365"/>
+      <path data-stage="learn" data-start="0.58" data-end="0.97" d="M200 315V272H410V238" stroke-dasharray="6 4"/>
      </g>
      <text x="796" y="256" text-anchor="middle" class="diagram-learning-label">Keep every candidate</text>
      <text x="220" y="258" text-anchor="middle" class="diagram-learning-label">Next training iteration</text>
-     <g class="diagram-card learning"><rect x="795" y="315" width="280" height="122" rx="5"/><text x="815" y="345" class="diagram-kicker">STORE TRANSITIONS</text><text x="815" y="375" class="diagram-title">All candidates, all turns</text><text x="815" y="405" class="diagram-copy">Collect rollout experience</text></g>
-     <g class="diagram-card learning"><rect x="425" y="315" width="300" height="122" rx="5"/><text x="445" y="345" class="diagram-kicker">COMPUTE ADVANTAGES</text><text x="445" y="375" class="diagram-title">Normalize within each group</text><text x="445" y="405" class="diagram-copy">Validity + performance, separately</text></g>
-     <g class="diagram-card learning"><rect x="45" y="315" width="310" height="122" rx="5"/><text x="65" y="345" class="diagram-kicker">UPDATE POLICY π</text><text x="65" y="375" class="diagram-title">Advantage-weighted GRPO</text><text x="65" y="405" class="diagram-copy">Learn from each response’s tokens</text></g>
+     <g class="diagram-card learning" data-stage="route"><rect x="795" y="315" width="280" height="122" rx="5"/><text x="815" y="345" class="diagram-kicker">STORE TRANSITIONS</text><text x="815" y="375" class="diagram-title">All candidates, all turns</text><text x="815" y="405" class="diagram-copy">Collect rollout experience</text></g>
+     <g class="diagram-card learning" data-stage="learn"><rect x="425" y="315" width="300" height="122" rx="5"/><text x="445" y="345" class="diagram-kicker">COMPUTE ADVANTAGES</text><text x="445" y="375" class="diagram-title">Normalize within each group</text><text x="445" y="405" class="diagram-copy">Validity + performance, separately</text></g>
+     <g class="diagram-card learning" data-stage="learn"><rect x="45" y="315" width="310" height="122" rx="5"/><text x="65" y="345" class="diagram-kicker">UPDATE POLICY π</text><text x="65" y="375" class="diagram-title">Advantage-weighted GRPO</text><text x="65" y="405" class="diagram-copy">Learn from each response’s tokens</text></g>
     </svg>
+   </div>
+   <div class="flow-controls" hidden>
+    <div class="flow-steps" role="group" aria-label="Training stages">
+     <button type="button" data-show-stage="sample"><b>1</b> Sample</button>
+     <button type="button" data-show-stage="simulate"><b>2</b> Simulate</button>
+     <button type="button" data-show-stage="route"><b>3</b> Select &amp; store</button>
+     <button type="button" data-show-stage="learn"><b>4</b> Update policy</button>
+    </div>
+    <button type="button" class="flow-playback">Pause</button>
    </div>
    <figcaption><strong>Source: manuscript Figure 1, Sections 3.2–3.3, and Appendix D, Algorithm 1.</strong> Simplified schematic. The upper loop constructs rollouts; the lower loop updates the policy after rollout collection. Advantages combine separately normalized validity and performance feedback (Appendix C.4).</figcaption>
   </figure>
