@@ -162,3 +162,23 @@ body{font-size:18px;color:var(--ink)}
   .overview-loop .flow-step.selected::after,
   .overview-loop.is-running .flow-step.selected + .flow-arrow::after { display: none; }
 }
+
+.paper-links .github-button {
+  background: #24292f;
+  border-color: #24292f;
+  color: #fff;
+}
+.paper-links .github-button:hover { background: #383f48; }
+.github-mark { width: 17px; height: 17px; flex: none; }
+.resource-grid .resource-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.resource-label .github-mark {
+  box-sizing: content-box;
+  padding: 3px;
+  border-radius: 50%;
+  background: #24292f;
+}
+.resource-label .link-icon { width: 19px; height: 19px; }
