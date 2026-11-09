@@ -141,19 +141,24 @@ body{font-size:18px;color:var(--ink)}
   height: 3px;
   background: var(--accent);
   transform-origin: left;
-  animation: circuit-turn-progress 5s linear both paused;
+  transform: scaleX(var(--turn-progress, 0));
 }
-.overview-loop.is-running .flow-step.selected::after { animation-play-state: running; }
-.flow-step.selected + .flow-arrow { color: var(--accent); }
-@keyframes circuit-turn-progress {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
+.overview-loop .flow-step.selected {
+  background: #faf0f2;
+  border-color: var(--accent);
+}
+.flow-step.selected + .flow-arrow { color: var(--accent); position: relative; }
+.overview-loop.is-running .flow-step.selected + .flow-arrow::after {
+  content: "";
+  position: absolute;
+  top: calc(50% - 3px);
+  left: calc(var(--turn-progress, 0) * (100% - 6px));
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
 }
 @media (prefers-reduced-motion: reduce) {
-  /* An explicit Play still advances the cards, without a moving progress line. */
-  .overview-loop .flow-step.selected::after {
-    opacity: 0;
-    animation: circuit-turn-progress 5s linear both paused !important;
-  }
-  .overview-loop.is-running .flow-step.selected::after { animation-play-state: running !important; }
+  .overview-loop .flow-step.selected::after,
+  .overview-loop.is-running .flow-step.selected + .flow-arrow::after { display: none; }
 }

@@ -13,6 +13,10 @@ function initCircuitLoop() {
  const playback = $('.turn-playback');
  const detail = $('.flow-detail');
  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+ const stepTime = 4200;
+ let frame = null;
+ let previous = null;
+ let elapsed = 0;
  let active = 0;
  let playing = !motion.matches;
  let inView = false;
@@ -28,21 +32,33 @@ function initCircuitLoop() {
   $('#flow-detail').textContent = description;
  }
 
+ function tick(time) {
+  if (previous !== null) elapsed += time - previous;
+  previous = time;
+  if (elapsed >= stepTime) {
+   select((active + Math.floor(elapsed / stepTime)) % cards.length);
+   elapsed %= stepTime;
+  }
+  loop.style.setProperty('--turn-progress', elapsed / stepTime);
+  frame = requestAnimationFrame(tick);
+ }
+
  function sync() {
-  loop.classList.toggle('is-running', playing && inView && !document.hidden);
+  if (frame !== null) cancelAnimationFrame(frame);
+  previous = null;
+  frame = null;
+  const running = playing && inView && !document.hidden;
+  loop.classList.toggle('is-running', running);
+  if (running) frame = requestAnimationFrame(tick);
   detail.setAttribute('aria-live', playing ? 'off' : 'polite');
   playback.textContent = playing ? 'Pause' : 'Play';
   playback.setAttribute('aria-label', playing ? 'Pause circuit walkthrough' : 'Play circuit walkthrough');
  }
 
- // The progress line and the transition to the next card share a single clock.
- loop.addEventListener('animationend', event => {
-  if (event.animationName === 'circuit-turn-progress' && event.target === cards[active] && playing) {
-   select((active + 1) % cards.length);
-  }
- });
  cards.forEach((card, i) => card.addEventListener('click', () => {
   playing = false;
+  elapsed = 0;
+  loop.style.setProperty('--turn-progress', 0);
   sync();
   select(i);
  }));
