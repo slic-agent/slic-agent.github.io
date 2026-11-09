@@ -7,10 +7,56 @@ const flow = [
  ['THE ENVIRONMENT','The simulator applies the edits and evaluates circuit behavior. Measurements and device operating points reveal both performance trade-offs and invalid operating conditions.'],
  ['THE FEEDBACK','The next prompt contains measured simulation results and retained history. SLIC can revise unsuccessful parameter updates and continue toward a design that satisfies every target.']
 ];
-$$('[data-flow]').forEach(b=>b.addEventListener('click',()=>{
- $$('[data-flow]').forEach(x=>{const active=x===b;x.classList.toggle('selected',active);x.setAttribute('aria-pressed',String(active));});
- const [label,detail]=flow[Number(b.dataset.flow)];$('#flow-label').textContent=label;$('#flow-detail').textContent=detail;
-}));
+function initCircuitLoop() {
+ const loop = $('.overview-loop');
+ const cards = $$('[data-flow]', loop);
+ const playback = $('.turn-playback');
+ const detail = $('.flow-detail');
+ const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+ let active = 0;
+ let playing = !motion.matches;
+ let inView = false;
+
+ function select(index) {
+  active = index;
+  cards.forEach((card, i) => {
+   card.classList.toggle('selected', i === index);
+   card.setAttribute('aria-pressed', String(i === index));
+  });
+  const [label, description] = flow[index];
+  $('#flow-label').textContent = label;
+  $('#flow-detail').textContent = description;
+ }
+
+ function sync() {
+  loop.classList.toggle('is-running', playing && inView && !document.hidden);
+  detail.setAttribute('aria-live', playing ? 'off' : 'polite');
+  playback.textContent = playing ? 'Pause' : 'Play';
+  playback.setAttribute('aria-label', playing ? 'Pause circuit walkthrough' : 'Play circuit walkthrough');
+ }
+
+ // The progress line and the transition to the next card share a single clock.
+ loop.addEventListener('animationend', event => {
+  if (event.animationName === 'circuit-turn-progress' && event.target === cards[active] && playing) {
+   select((active + 1) % cards.length);
+  }
+ });
+ cards.forEach((card, i) => card.addEventListener('click', () => {
+  playing = false;
+  sync();
+  select(i);
+ }));
+ playback.addEventListener('click', () => { playing = !playing; sync(); });
+ motion.addEventListener('change', () => { playing = !motion.matches; sync(); });
+ document.addEventListener('visibilitychange', sync);
+ new IntersectionObserver(([entry]) => {
+  inView = entry.isIntersecting;
+  sync();
+ }).observe(loop);
+ playback.hidden = false;
+ sync();
+}
+initCircuitLoop();
 const results = {
  id:{'4':[[1.7,.2],[13.5,.6],[74.9,0],[72.5,.7]],'8':[[2.3,.5],[26.5,.7],[87.1,.7],[84.3,1.0]]},
  ood:{'4':[[3.6,.5],[11,.2],[56.8,1.3],[56.9,3.1]],'8':[[4.4,.9],[19.9,1.3],[70.6,1.2],[72.6,2.0]]}

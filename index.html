@@ -67,13 +67,16 @@
    <a class="task-trace-link" href="#circuits">Inspect each turn and its measured outcome ↓</a>
   </div>
  </div>
- <h3 class="task-loop-heading">One turn: choose updates, simulate, and refine</h3><p class="turn-definition"><strong>A turn is one model response followed by one simulator call.</strong> The model chooses a variable number of parameter updates, which are applied together before evaluating the resulting circuit. For example, the first turn above contains 22 parameter updates.</p>
+ <div class="turn-heading-row" id="circuit-loop">
+  <h3 class="task-loop-heading">One turn: choose updates, simulate, and refine</h3>
+  <button type="button" class="turn-playback" hidden>Play</button>
+ </div><p class="turn-definition"><strong>A turn is one model response followed by one simulator call.</strong> The model chooses a variable number of parameter updates, which are applied together before evaluating the resulting circuit. For example, the first turn above contains 22 parameter updates.</p>
  <div class="overview-loop" role="group" aria-label="Explore the four stages of circuit optimization">
  <button class="flow-step selected" data-flow="0" aria-pressed="true"><span class="step-number">01</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 12h32M8 24h23M8 36h32"/><circle cx="35" cy="24" r="4"/></svg><strong>Read the circuit</strong><small>Topology + targets + state</small></button><span class="flow-arrow" aria-hidden="true">→</span>
  <button class="flow-step" data-flow="1" aria-pressed="false"><span class="step-number">02</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 36l7-2 21-21-5-5-21 21-2 7M28 13l7 7M9 42h31"/></svg><strong>Choose parameter updates</strong><small>Model chooses how many</small></button><span class="flow-arrow" aria-hidden="true">→</span>
  <button class="flow-step" data-flow="2" aria-pressed="false"><span class="step-number">03</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M5 26h8l5-16 10 30 6-19h9"/></svg><strong>Run simulation</strong><small>SPICE evaluates the design</small></button><span class="flow-arrow" aria-hidden="true">→</span>
  <button class="flow-step" data-flow="3" aria-pressed="false"><span class="step-number">04</span><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 39V9M9 39h32M14 31l9-10 7 5 11-17"/></svg><strong>Refine with feedback</strong><small>Measure, diagnose, repeat</small></button>
- </div><div class="flow-detail" aria-live="polite"><span class="detail-label" id="flow-label">THE INPUT</span><p id="flow-detail">The input is a structured circuit graph represented as text, together with design targets, device parameters, and measured simulation results.</p><span class="loop-back">↳ Repeat until success or the simulator-call budget is reached</span></div>
+ </div><div class="flow-detail" aria-live="off"><span class="detail-label" id="flow-label">THE INPUT</span><p id="flow-detail">The input is a structured circuit graph represented as text, together with design targets, device parameters, and measured simulation results.</p><span class="loop-back">↳ Repeat until success or the simulator-call budget is reached</span></div>
 
 </section>
 

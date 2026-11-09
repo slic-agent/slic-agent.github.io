@@ -117,3 +117,43 @@ body{font-size:18px;color:var(--ink)}
 @media (max-width: 560px) {
   .flow-steps { display: grid; grid-template-columns: auto auto; gap: 4px 12px; }
 }
+
+.turn-heading-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+.turn-playback {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--muted);
+  padding: 5px 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.overview-loop .flow-step.selected::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: var(--accent);
+  transform-origin: left;
+  animation: circuit-turn-progress 5s linear both paused;
+}
+.overview-loop.is-running .flow-step.selected::after { animation-play-state: running; }
+.flow-step.selected + .flow-arrow { color: var(--accent); }
+@keyframes circuit-turn-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* An explicit Play still advances the cards, without a moving progress line. */
+  .overview-loop .flow-step.selected::after {
+    opacity: 0;
+    animation: circuit-turn-progress 5s linear both paused !important;
+  }
+  .overview-loop.is-running .flow-step.selected::after { animation-play-state: running !important; }
+}
